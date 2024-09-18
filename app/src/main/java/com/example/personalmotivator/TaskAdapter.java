@@ -3,6 +3,7 @@ package com.example.personalmotivator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,38 +22,43 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate the layout for each task item
+        // Inflate the layout for each task card item
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(android.R.layout.simple_list_item_1, parent, false);
+                .inflate(R.layout.item_task_card, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Bind the task data to the TextView
+        // Bind the task data to the views
         String task = tasks.get(position);
-        holder.textViewTask.setText(task);
+        holder.textViewTaskName.setText(task);
+
+        // You can add click listeners for the buttons if needed later
+        holder.buttonOne.setOnClickListener(v -> {
+            // Button 1 functionality (to be added later)
+        });
+
+        holder.buttonTwo.setOnClickListener(v -> {
+            // Button 2 functionality (to be added later)
+        });
     }
 
     @Override
     public int getItemCount() {
-        // Return the number of tasks
         return tasks.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewTask;
+        TextView textViewTaskName;
+        Button buttonOne;
+        Button buttonTwo;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewTask = itemView.findViewById(android.R.id.text1);
+            textViewTaskName = itemView.findViewById(R.id.text_view_task_name);
+            buttonOne = itemView.findViewById(R.id.button_one);
+            buttonTwo = itemView.findViewById(R.id.button_two);
         }
-    }
-
-    // Method to update the task list and notify the adapter
-    public void updateTasks(List<String> newTasks) {
-        tasks.clear();
-        tasks.addAll(newTasks);
-        notifyDataSetChanged();
     }
 }
