@@ -1,24 +1,29 @@
 package com.example.personalmotivator;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.TimePickerDialog;
-import android.content.DialogInterface;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.AlarmClock;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class AddTaskActivity extends AppCompatActivity {
 
     private Button btnAddAlarm;
     private Button btnViewTasks;
     private Button btnAddTasks;
+    private TextView textAlarmTime;
+
+    private Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,9 @@ public class AddTaskActivity extends AppCompatActivity {
         btnAddAlarm = findViewById(R.id.button_add_alarm);
         btnViewTasks = findViewById(R.id.button_view_tasks);
         btnAddTasks = findViewById(R.id.button_add_task);
+        textAlarmTime = findViewById(R.id.text_alarm_time);
+
+        calendar = Calendar.getInstance();
 
         btnAddAlarm.setOnClickListener(view -> showTimePicker());
         btnViewTasks.setOnClickListener(view -> openTaskList());
@@ -35,22 +43,41 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     private void showTimePicker() {
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                (TimePicker view, int hourOfDay, int minute) -> setAlarm(hourOfDay, minute), 12, 0, false);
-        timePickerDialog.show();
+        // Open a time picker dialog
+        android.app.TimePickerDialog.OnTimeSetListener timeSetListener =
+                (timePicker, hourOfDay, minute) -> {
+                    calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                    calendar.set(Calendar.MINUTE, minute);
+                    calendar.set(Calendar.SECOND, 0);
+
+                    // Format and display the selected time
+                    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+                    String formattedTime = timeFormat.format(calendar.getTime());
+                    textAlarmTime.setText("Alarm set for: " + formattedTime);
+
+                    // Set the alarm after time is selected
+                    setAlarm(calendar);
+                };
+
+        // Create the TimePickerDialog
+        new android.app.TimePickerDialog(
+                AddTaskActivity.this,
+                timeSetListener,
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                true
+        ).show();
     }
 
-    private void setAlarm(int hourOfDay, int minute) {
-        Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM)
-                .putExtra(AlarmClock.EXTRA_HOUR, hourOfDay)
-                .putExtra(AlarmClock.EXTRA_MINUTES, minute)
-                .putExtra(AlarmClock.EXTRA_MESSAGE, "Personal Motivator Alarm");
+    private void setAlarm(Calendar alarmTime) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-            Toast.makeText(this, "Alarm set for: " + hourOfDay + ":" + minute, Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "No alarm app found on this device", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        if (alarmManager != null) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime.getTimeInMillis(), pendingIntent);
+            Toast.makeText(this, "Alarm is set!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -58,7 +85,6 @@ public class AddTaskActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add New Task");
 
-        // Inflate and set the layout for the dialog
         final EditText input = new EditText(this);
         input.setHint("Enter task description");
         builder.setView(input);
@@ -66,10 +92,9 @@ public class AddTaskActivity extends AppCompatActivity {
         builder.setPositiveButton("Add", (dialog, which) -> {
             String taskDescription = input.getText().toString();
             if (!taskDescription.isEmpty()) {
-                // Create an Intent to send the task description to TaskListActivity
-                //Intent intent = new Intent(this, TaskListActivity.class);
-                //intent.putExtra("TASK_DESCRIPTION", taskDescription);
-                //startActivity(intent);
+                // Add task to TaskData singleton
+                TaskData.getInstance().addTask(taskDescription);
+                Toast.makeText(this, "Task added!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Task description cannot be empty", Toast.LENGTH_SHORT).show();
             }

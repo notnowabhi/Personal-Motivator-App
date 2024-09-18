@@ -8,7 +8,7 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardId"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="115dp"
         android:layout_centerHorizontal="true">
 
         <RelativeLayout
@@ -19,9 +19,20 @@
                 android:id="@+id/text_view_tokens"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
                 android:text="Tokens: 0"
                 android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:id="@+id/text_alarm_time"
+                android:text="Alarm Time"
+                android:layout_marginTop="16dp"
+                android:textSize="24sp"
+                android:layout_below="@+id/text_view_tokens"/>
 
         </RelativeLayout>
 
