@@ -1,16 +1,17 @@
 package com.example.personalmotivator;
 
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.AlarmClock;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class AddTaskActivity extends AppCompatActivity {
@@ -32,7 +33,6 @@ public class AddTaskActivity extends AppCompatActivity {
         btnViewTasks.setOnClickListener(view -> openTaskList());
         btnAddTasks.setOnClickListener(view -> showAddTaskDialog());
     }
-    //change 1
 
     private void showTimePicker() {
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
@@ -55,29 +55,33 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     private void showAddTaskDialog() {
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_add_task, null);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(dialogView)
-                .setTitle("Add New Task")
-                .setPositiveButton("Add", (dialog, which) -> {
-                    EditText editTextTask = dialogView.findViewById(R.id.edit_text_task);
-                    String task = editTextTask.getText().toString().trim();
-                    if (!task.isEmpty()) {
-                        // Handle the task addition here
-                        Toast.makeText(this, "Task Added: " + task, Toast.LENGTH_SHORT).show();
-                        // Add code to save task to a list or database if needed
-                    } else {
-                        Toast.makeText(this, "Task cannot be empty", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                .create()
-                .show();
+        builder.setTitle("Add New Task");
+
+        // Inflate and set the layout for the dialog
+        final EditText input = new EditText(this);
+        input.setHint("Enter task description");
+        builder.setView(input);
+
+        builder.setPositiveButton("Add", (dialog, which) -> {
+            String taskDescription = input.getText().toString();
+            if (!taskDescription.isEmpty()) {
+                // Create an Intent to send the task description to TaskListActivity
+                //Intent intent = new Intent(this, TaskListActivity.class);
+                //intent.putExtra("TASK_DESCRIPTION", taskDescription);
+                //startActivity(intent);
+            } else {
+                Toast.makeText(this, "Task description cannot be empty", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.show();
     }
 
     private void openTaskList() {
+        // Intent to open TaskListActivity
         Intent intent = new Intent(this, TaskListActivity.class);
         startActivity(intent);
     }
