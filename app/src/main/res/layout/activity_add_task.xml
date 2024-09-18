@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Card to display tokens -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardId"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/text_view_tokens"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Tokens: 0"
+                android:textSize="24sp" />
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Card for task-related buttons -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardId2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cardId"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <!-- Button to add an alarm -->
+            <Button
+                android:id="@+id/button_add_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:text="Add Alarm" />
+
+            <!-- Button to add a task -->
+            <Button
+                android:id="@+id/button_add_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/button_add_alarm"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:text="Add Task" />
+
+            <!-- Button to view task list -->
+            <Button
+                android:id="@+id/button_view_tasks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/button_add_task"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:text="View Task List" />
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</RelativeLayout>
