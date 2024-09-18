@@ -4,9 +4,43 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_tasks"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="16dp" />
+        android:layout_height="80dp"
+        android:id="@+id/cardId">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Activity List"
+                android:layout_centerInParent="true"
+                android:textSize="24sp"/>
+
+        </RelativeLayout>
+
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cardId"
+        android:id="@+id/cardId2"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_tasks"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp" />
+
+    </com.google.android.material.card.MaterialCardView>
+
 </RelativeLayout>
