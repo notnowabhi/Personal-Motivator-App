@@ -24,7 +24,7 @@ public class TaskListActivity extends AppCompatActivity {
 
         // Get tasks from TaskData singleton
         taskList = TaskData.getInstance().getTasks();
-        taskAdapter = new TaskAdapter(taskList);
+        taskAdapter = new TaskAdapter(this);
         recyclerView.setAdapter(taskAdapter);
     }
 }

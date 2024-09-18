@@ -1,6 +1,7 @@
 package com.example.personalmotivator;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -35,7 +36,7 @@ public class SecondActivity extends AppCompatActivity {
         taskRecyclerView = findViewById(R.id.taskRecyclerView);
 
         taskList = new ArrayList<>();
-        taskAdapter = new TaskAdapter(taskList);
+        taskAdapter = new TaskAdapter((Context) taskList);
         taskRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         taskRecyclerView.setAdapter(taskAdapter);
 

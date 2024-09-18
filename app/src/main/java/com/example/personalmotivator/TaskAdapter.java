@@ -1,64 +1,69 @@
 package com.example.personalmotivator;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.List;
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
+    private List<String> taskList;
+    private Context context;
 
-    private List<String> tasks;
-
-    public TaskAdapter(List<String> tasks) {
-        this.tasks = tasks;
+    public TaskAdapter(Context context) {
+        this.context = context;
+        this.taskList = TaskData.getInstance().getTasks(); // Get tasks from TaskData singleton
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate the layout for each task card item
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_task_card, parent, false);
-        return new ViewHolder(view);
+    public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_task_card, parent, false);
+        return new TaskViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Bind the task data to the views
-        String task = tasks.get(position);
-        holder.textViewTaskName.setText(task);
+    public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
+        String task = taskList.get(position);
+        holder.taskNameTextView.setText(task); // Set task name in TextView
 
-        // You can add click listeners for the buttons if needed later
-        holder.buttonOne.setOnClickListener(v -> {
-            // Button 1 functionality (to be added later)
+        // Set up button click listeners
+        holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int adapterPosition = holder.getAdapterPosition(); // Get the updated position
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    // Remove the task from the list
+                    TaskData.getInstance().getTasks().remove(adapterPosition);
+
+                    // Notify adapter that the data has changed
+                    notifyItemRemoved(adapterPosition);
+                    notifyItemRangeChanged(adapterPosition, taskList.size());
+                }
+            }
         });
 
-        holder.buttonTwo.setOnClickListener(v -> {
-            // Button 2 functionality (to be added later)
-        });
+        // Button 2 functionality will be added later
     }
 
     @Override
     public int getItemCount() {
-        return tasks.size();
+        return taskList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewTaskName;
-        Button buttonOne;
-        Button buttonTwo;
+    public static class TaskViewHolder extends RecyclerView.ViewHolder {
+        TextView taskNameTextView;
+        Button buttonDelete, buttonTwo;
 
-        public ViewHolder(@NonNull View itemView) {
+        public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewTaskName = itemView.findViewById(R.id.text_view_task_name);
-            buttonOne = itemView.findViewById(R.id.button_one);
-            buttonTwo = itemView.findViewById(R.id.button_two);
+            taskNameTextView = itemView.findViewById(R.id.text_view_task_name);
+            buttonDelete = itemView.findViewById(R.id.button_one); // Button 1
+            buttonTwo = itemView.findViewById(R.id.button_two); // Button 2
         }
     }
 }
