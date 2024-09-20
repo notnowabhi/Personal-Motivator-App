@@ -20,4 +20,22 @@
         android:layout_below="@id/button_start"
         android:layout_marginTop="20dp" />
 
+    <Button
+        android:id="@+id/button_read_steps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Read Steps"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/button_request_permission"
+        android:layout_marginTop="20dp" />
+
+    <Button
+        android:id="@+id/button_aggregate_steps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aggregate Steps"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/button_read_steps"
+        android:layout_marginTop="20dp" />
+
 </RelativeLayout>
