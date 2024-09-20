@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Build;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -43,23 +44,28 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     private void showTimePicker() {
-        // Open a time picker dialog
         android.app.TimePickerDialog.OnTimeSetListener timeSetListener =
                 (timePicker, hourOfDay, minute) -> {
                     calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                     calendar.set(Calendar.MINUTE, minute);
                     calendar.set(Calendar.SECOND, 0);
 
-                    // Format and display the selected time
                     SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
                     String formattedTime = timeFormat.format(calendar.getTime());
                     textAlarmTime.setText("Alarm set for: " + formattedTime);
 
-                    // Set the alarm after time is selected
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                        if (alarmManager != null && !alarmManager.canScheduleExactAlarms()) {
+                            Intent intent = new Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                            startActivity(intent);
+                            return;
+                        }
+                    }
+
                     setAlarm(calendar);
                 };
 
-        // Create the TimePickerDialog
         new android.app.TimePickerDialog(
                 AddTaskActivity.this,
                 timeSetListener,
@@ -106,7 +112,6 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     private void openTaskList() {
-        // Intent to open TaskListActivity
         Intent intent = new Intent(this, TaskListActivity.class);
         startActivity(intent);
     }

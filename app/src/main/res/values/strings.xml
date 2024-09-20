@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Personal motivator</string>
+    <string name="app_name">Personal Motivator</string>
+    <string name="permissions_rationale_text">This app needs access to your health data to track your activity and provide insights. Your data is securely handled and will not be shared without your consent.</string>
 </resources>
