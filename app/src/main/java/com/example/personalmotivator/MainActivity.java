@@ -2,6 +2,7 @@ package com.example.personalmotivator;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<String[]> permissionLauncher;
     private Button button_start, button_read_steps;
+    private int fake_steps = 12;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +38,27 @@ public class MainActivity extends AppCompatActivity {
         // Button to read step records
         button_read_steps = findViewById(R.id.button_read_steps);
         button_read_steps.setOnClickListener(v -> readStepsByTimeRange());
+
+        button_read_steps.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Toast.makeText(MainActivity.this, "Steps: " + fake_steps + " steps today!", Toast.LENGTH_SHORT).show();
+                fake_steps += 5;
+                return true;
+            }
+        });
     }
 
     // Function to read step records using Kotlin coroutine
     private void readStepsByTimeRange() {
         // Access the Kotlin singleton 'HealthConnectUtils' using '.INSTANCE'
         HealthConnectUtils.INSTANCE.readStepsInCoroutine(this, stepRecords -> {
-            if (stepRecords != null) {
+            if (stepRecords != null && !stepRecords.isEmpty()) {
                 for (StepsRecord record : stepRecords) {
                     runOnUiThread(() -> Toast.makeText(MainActivity.this, "Steps: " + record.getCount(), Toast.LENGTH_SHORT).show());
                 }
+            } else if (stepRecords != null && stepRecords.isEmpty()) {
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Step Record is empty. Please walk.", Toast.LENGTH_SHORT).show());
             } else {
                 runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed to read steps", Toast.LENGTH_SHORT).show());
             }
