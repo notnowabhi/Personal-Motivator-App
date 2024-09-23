@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Build;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,8 +23,8 @@ public class AddTaskActivity extends AppCompatActivity {
     private Button btnAddAlarm;
     private Button btnViewTasks;
     private Button btnAddTasks;
+    private Button btnViewWeb;
     private TextView textAlarmTime;
-
     private Calendar calendar;
 
     @Override
@@ -34,6 +35,7 @@ public class AddTaskActivity extends AppCompatActivity {
         btnAddAlarm = findViewById(R.id.button_add_alarm);
         btnViewTasks = findViewById(R.id.button_view_tasks);
         btnAddTasks = findViewById(R.id.button_add_task);
+        btnViewWeb = findViewById(R.id.webViewId);
         textAlarmTime = findViewById(R.id.text_alarm_time);
 
         calendar = Calendar.getInstance();
@@ -41,6 +43,12 @@ public class AddTaskActivity extends AppCompatActivity {
         btnAddAlarm.setOnClickListener(view -> showTimePicker());
         btnViewTasks.setOnClickListener(view -> openTaskList());
         btnAddTasks.setOnClickListener(view -> showAddTaskDialog());
+        btnViewWeb.setOnClickListener(view -> showWebView());
+    }
+
+    private void showWebView(){
+        Intent intent = new Intent(AddTaskActivity.this, WebviewActivity.class);
+        startActivity(intent);
     }
 
     private void showTimePicker() {

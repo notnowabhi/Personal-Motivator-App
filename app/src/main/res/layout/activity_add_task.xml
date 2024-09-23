@@ -81,6 +81,15 @@
                 android:layout_marginTop="16dp"
                 android:text="View Task List" />
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/webViewId"
+                android:layout_below="@+id/button_view_tasks"
+                android:layout_centerHorizontal="true"
+                android:text="View Web Activty"
+                android:layout_marginTop="16dp"/>
+
         </RelativeLayout>
 
     </com.google.android.material.card.MaterialCardView>
